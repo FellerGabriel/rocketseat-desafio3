@@ -47,7 +47,7 @@ export default function App() {
         keyExtractor={repository => repository.id}
         renderItem={({item : repository}) => (
           <View style={styles.repositoryContainer}>
-          <Text style={styles.repository}>{repository.id}</Text>
+          <Text style={styles.repository}>{repository.title}</Text>
 
           <View style={styles.techsContainer}>
             {repository.techs.map(tech => (
