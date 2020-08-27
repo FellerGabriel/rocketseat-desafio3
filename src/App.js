@@ -23,17 +23,19 @@ export default function App() {
   },[])
 
   async function handleLikeRepository(id) {
-    const response = await api.put(`repositories/${id}/like`)
-    
+    const response = await api.post(`repositories/${id}/like`)        
+
+    const likedRepository = response.data;
+
     const repositoriesUpdated = repositories.map(repository => {
-      if (repository.id == id) {
-        return response;
+      if (repository.id === id) {
+        return likedRepository;
       }else{
         return repository;
       }
-    })
+    });
 
-    setRepositories([...repositories, repositoriesUpdated])
+    setRepositories(repositoriesUpdated)
     
   }
 
@@ -43,7 +45,6 @@ export default function App() {
       <SafeAreaView style={styles.container}>
         <FlatList
         data={repositories}
-        style={styles.container}
         keyExtractor={repository => repository.id}
         renderItem={({item : repository}) => (
           <View style={styles.repositoryContainer}>
@@ -51,7 +52,7 @@ export default function App() {
 
           <View style={styles.techsContainer}>
             {repository.techs.map(tech => (
-              <Text key={tech}style={styles.tech}>
+              <Text key={tech} style={styles.tech}>
               {tech}
             </Text>
             ))}                        
@@ -64,11 +65,10 @@ export default function App() {
             >
               {repository.likes} curtidas
             </Text>
-          </View>
-
+          </View>          
           <TouchableOpacity
             style={styles.button}
-            onPress={() => handleLikeRepository(1)}            
+            onPress={() => handleLikeRepository(repository.id)}            
             testID={`like-button-${repository.id}`}
           >
             <Text style={styles.buttonText}>Curtir</Text>
